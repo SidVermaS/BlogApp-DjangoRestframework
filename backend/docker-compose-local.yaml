@@ -1,0 +1,41 @@
+services:
+  postgres_db:
+    image: pg18-trixie
+    container_name: blog_postgres_db
+    env_file:
+      - .env.local
+    ports:
+      - '${POSTGRES_PORT}:5432'
+    networks:
+      - backend-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $POSTGRES_USER -d $POSTGRES_DB']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    container_name: blog_backend
+    env_file:
+      - .env.local
+    ports:
+      - '${BACKEND_PORT}:8000'
+    networks:
+      - backend-network
+    volumes:
+      - .:/app
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+
+networks:
+  backend-network:
+    driver: bridge
