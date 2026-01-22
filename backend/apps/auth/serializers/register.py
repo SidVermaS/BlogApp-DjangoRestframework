@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from django.db import IntegrityError, transaction
+from django.db import transaction
 from backend.apps.profiles.model import Profile
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -11,21 +11,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['email', 'name', 'password', 'password_confirm']
 
     def create(self, validated_data):
-        try:
-            validated_data.pop('password_confirm')
-            
-            with transaction.atomic():
-                profile = Profile.objects.create_user(
-                    email=validated_data['email'],
-                    password=validated_data['password'],
-                    name=validated_data['name']
-                )
-                return profile
-        except IntegrityError:
+        validated_data.pop('password_confirm')           
+       
+        profile = Profile.objects.create_user(
+            email=validated_data['email'],
+            password=validated_data['password'],
+            name=validated_data['name']
+        )
+        return profile
+        
+    def validate_email(self, value):
+        if Profile.objects.filter(email = value).exists():
             raise serializers.ValidationError({
                 "email":"Email already exists"
             })
-
+        return value.lower()
+    
     def validate(self, attrs):       
         if len(attrs['name'].strip()) < 2:
             raise serializers.ValidationError({
