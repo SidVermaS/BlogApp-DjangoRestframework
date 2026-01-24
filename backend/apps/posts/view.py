@@ -4,10 +4,13 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from .models import Post
 from .serializers import PostListSerializer, PostDetailSerializer, PostCreateSerializer, PostUpdateSerializer
-from core import ALLOWED_HTTP_METHODS, DefaultLimitOffsetPagination
+from core.constants import ALLOWED_HTTP_METHODS
+from core.pagination import DefaultLimitOffsetPagination
+
 
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.select_related('author')
@@ -15,9 +18,9 @@ class PostViewSet(ModelViewSet):
     search_fields = ['title']
     ordering_fields = ['created_at']
     ordering = ['-created_at']
-    pagination_class=DefaultLimitOffsetPagination
-    permission_classes=[IsAuthenticated]
-    authentication_classes=[TokenAuthentication]
+    pagination_class = DefaultLimitOffsetPagination
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
     http_method_names = ALLOWED_HTTP_METHODS
 
     def get_serializer_class(self):

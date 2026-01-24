@@ -54,4 +54,7 @@ class LoginSerializer(serializers.ModelSerializer):
         return {
             'access_token': str(access_token)
         }
+    class Meta:
+        model = Profile
+        fields = ['email', 'password']
         
