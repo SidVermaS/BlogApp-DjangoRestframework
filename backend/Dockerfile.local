@@ -1,41 +1,40 @@
 ARG PYTHON_VERSION=3.14
 ARG BUILD_RUNTIME_IMAGE=python:${PYTHON_VERSION}-alpine
+
 # --- Stage 1: Builder ---
-# Official Python image
 FROM ${BUILD_RUNTIME_IMAGE} AS builder
 
-# Set workdir
 WORKDIR /app
 
 # Copy requirements file for caching
 COPY requirements.txt .
 
-# Upgrade pip & Install pip
+# Upgrade pip & install dependencies
 RUN pip install --upgrade pip \
-    && pip install --no-cache -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt
 
 # --- Stage 2: Runtime ---
 FROM ${BUILD_RUNTIME_IMAGE}
+
+ARG PYTHON_VERSION=3.14
 
 WORKDIR /app
 
 # Install runtime dependencies
 RUN apk add --no-cache postgresql-client
 
-# Copy installed Python packages from builder
-COPY --from=builder /usr/local/lib/python3.*/site-packages /usr/local/lib/python3.*/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin 
+# Copy installed Python packages from builder (use explicit version)
+COPY --from=builder /usr/local/lib/python${PYTHON_VERSION}/site-packages /usr/local/lib/python${PYTHON_VERSION}/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy app code
 COPY . .
 
 # Make entrypoint executable
-RUN chmod +x entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 
-# Export port
 EXPOSE 8000
 
-# Run server
-CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:${BACKEND_PORT:-8000}"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

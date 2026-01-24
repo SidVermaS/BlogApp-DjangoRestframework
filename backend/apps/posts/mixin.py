@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .model import Post
+from .models import Post
 class PostValidationMixin:
     def validate_title(self, value):
         value = value.strip()

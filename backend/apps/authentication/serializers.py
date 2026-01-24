@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import AccessToken
-from backend.apps.profiles import Profile
+from apps.profiles.models import Profile
 
 class RegisterSerializer(serializers.ModelSerializer):
 

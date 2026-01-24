@@ -1,7 +1,6 @@
-import uuid
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from backend.core.base import BaseModel
+from core.base import BaseModel
 
 class ProfileManager(BaseUserManager):
     def create_user(self, email, password = None, **extra_fields):

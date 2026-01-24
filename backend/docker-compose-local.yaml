@@ -1,15 +1,15 @@
 services:
   postgres_db:
-    image: pg18-trixie
+    image: pgvector/pgvector:pg18-trixie
     container_name: blog_postgres_db
     env_file:
       - .env.local
     ports:
-      - '${POSTGRES_PORT}:5432'
+      - '5433:${POSTGRES_PORT}'
     networks:
       - backend-network
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U $POSTGRES_USER -d $POSTGRES_DB']
       interval: 5s
@@ -28,7 +28,7 @@ services:
     networks:
       - backend-network
     volumes:
-      - .:/app
+      - ./:/app
     depends_on:
       postgres_db:
         condition: service_healthy

@@ -1,4 +1,4 @@
-from backend.apps.auth import RegisterAPI, LoginAPI
+from apps.authentication.views import RegisterAPI, LoginAPI
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 

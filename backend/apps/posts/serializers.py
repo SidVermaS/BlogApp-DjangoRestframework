@@ -1,15 +1,15 @@
 from rest_framework import serializers
 from django.db import IntegrityError
-from backend.apps.profiles.serializers import AuthorSerializer
+from apps.profiles.serializers import AuthorSerializer
 from .mixin import PostValidationMixin
-from .model import Post
+from .models import Post
 
 class PostListSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only = True)
     
     class Meta:
         model = Post
-        fields = ['id', 'title', 'content', 'image', 'author', 'likes_count', 'comments_count', 'created_at']
+        fields = ['id', 'title', 'content',  'author', 'likes_count', 'comments_count', 'created_at']
         read_only_fields = fields
 
 class PostDetailSerializer(serializers.ModelSerializer):
@@ -17,7 +17,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'content', 'image', 'author', 'likes_count', 'comments_count', 'created_at']
+        fields = ['id', 'title', 'content',  'author', 'likes_count', 'comments_count', 'created_at']
         read_only_fields = fields
 
 class PostCreateSerializer(PostValidationMixin, serializers.ModelSerializer):
@@ -31,13 +31,13 @@ class PostCreateSerializer(PostValidationMixin, serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['title', 'content', 'image']
+        fields = ['title', 'content', ]
         
 class PostUpdateSerializer(PostValidationMixin, serializers.ModelSerializer):
     title = serializers.CharField(required = False)
     content = serializers.CharField(required = False)
-    image = serializers.ImageField(required = False)
+    # image = serializers.ImageField(required = False)
 
     class Meta:
         model = Post
-        fields = ['title', 'content', 'image']
+        fields = ['title', 'content',]
