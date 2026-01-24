@@ -1,4 +1,4 @@
-from .serializers.register import RegisterSerializer
-from .views import RegisterAPI
+from .serializers import RegisterSerializer, LoginSerializer
+from .views import RegisterAPI, LoginAPI
 
-__all__ = ['RegisterSerializer', 'RegisterAPI']
+__all__ = ['RegisterSerializer', 'LoginSerializer', 'RegisterAPI', 'LoginAPI']

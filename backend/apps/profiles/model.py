@@ -23,7 +23,6 @@ class Profile(AbstractBaseUser, PermissionsMixin, BaseModel):
         ACTIVE = 'ACTIVE'
         BLOCKED = 'BLOCKED'
 
-    public_id = models.UUIDField(default = uuid.uuid4, editable = False, unique = True)
     email = models.EmailField(unique = True)
     name = models.CharField(max_length = 100)
     status = models.CharField(max_length = 10, choices = Status.choices, default = Status.ACTIVE, db_index = True)

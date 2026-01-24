@@ -1,0 +1,1 @@
+ALLOWED_HTTP_METHODS: list[str] = ['get', 'post', 'patch', 'delete', 'head', 'options']
