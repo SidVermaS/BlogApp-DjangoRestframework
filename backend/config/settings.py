@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'apps.authentication',
     'apps.profiles',
     'apps.posts',
+    'apps.likes',
+    'apps.comments',
 ]
 
 # Custom user model

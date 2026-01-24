@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.db import IntegrityError
 from apps.profiles.serializers import AuthorSerializer
-from .mixin import PostValidationMixin
+from .mixins import PostValidationMixin
 from .models import Post
 
 class PostListSerializer(serializers.ModelSerializer):
@@ -27,7 +27,7 @@ class PostCreateSerializer(PostValidationMixin, serializers.ModelSerializer):
         try:
             return Post.objects.create(author = request.user, **validated_data)
         except IntegrityError:
-            raise serializers.ValidationError({'title': 'title already exists'})
+            raise serializers.ValidationError('title already exists')
 
     class Meta:
         model = Post

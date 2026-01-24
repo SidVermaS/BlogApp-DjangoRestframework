@@ -41,7 +41,8 @@ class PostViewSet(ModelViewSet):
         serializer = self.get_serializer(data = request.data)
         serializer.is_valid(raise_exception = True)
         
-        self.perform_create(serializer)
+        # self.perform_create(serializer)
+        serializer.save()
 
         detail_serializer = PostDetailSerializer(serializer.instance, context={
             'request': request

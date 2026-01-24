@@ -1,6 +1,5 @@
 from django.apps import AppConfig
 
-
-class PostsConfig(AppConfig):
+class LikesConfig(AppConfig):
     default_auto_field = 'django.db.models.AutoField'
-    name = 'apps.posts'
+    name = 'apps.likes'
