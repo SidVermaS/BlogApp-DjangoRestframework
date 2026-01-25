@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from apps.authentication.serializers import RegisterSerializer, LoginSerializer
 
-class RegisterAPI(APIView):
+class RegisterAPIView(APIView):
+    http_method_names = ['post']
     permission_classes = [AllowAny]
     
     def post(self, request):
@@ -14,7 +15,8 @@ class RegisterAPI(APIView):
 
         return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
     
-class LoginAPI(APIView):
+class LoginAPIView(APIView):
+    http_method_names = ['post']
     permission_classes = [AllowAny]
 
     def post(self, request):

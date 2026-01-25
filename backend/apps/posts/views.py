@@ -39,11 +39,9 @@ class PostViewSet(ModelViewSet):
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data = request.data)
-        serializer.is_valid(raise_exception = True)
-        
+        serializer.is_valid(raise_exception = True)        
         # self.perform_create(serializer)
         serializer.save()
-
         detail_serializer = PostDetailSerializer(serializer.instance, context={
             'request': request
         })
@@ -55,10 +53,11 @@ class PostViewSet(ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception = True)
-        self.perform_update(serializer)
+        # self.perform_update(serializer)
+        serializer.save()
         detail_serializer=PostDetailSerializer(serializer.instance, context={'request':request})
         return Response({ 'success': True, 'data': detail_serializer.data }, status = status.HTTP_200_OK)
-    
+
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
